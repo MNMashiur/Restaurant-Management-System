@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+
 class MenuItem {
     private String name;
     private String description;
@@ -50,11 +51,14 @@ class OrderItem {
 
 public class Client {
     public static void main(String[] args) throws IOException{
+
+        Scanner scanner = new Scanner(System.in);
+
+
         List<MenuItem> menu = new ArrayList<>();
         List<OrderItem> order = new ArrayList<>();
         initializeMenu(menu);
 
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to the restaurant!");
         int choice;
@@ -67,35 +71,35 @@ public class Client {
             System.out.println("0. Exit");
             choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1:
-                    displayMenu(menu);
-                    break;
-                case 2:
-                    takeOrder(menu, order, scanner);
-                    break;
-                case 3:
-                    printBill(order);
-                    break;
-                case 4:
+            if (choice == 1) {
+                displayMenu(menu);
+            } else if (choice == 2) {
+                takeOrder(menu, order, scanner);
+            } else if (choice == 3) {
+                printBill(order);
+            } else if (choice == 4) {
+
+
                     Socket socket = new Socket("127.0.0.1",65306);
-                    ObjectOutputStream oos= new ObjectOutputStream(socket.getOutputStream());
-                    ObjectInputStream ois= new ObjectInputStream(socket.getInputStream());
-                    for(int i=0; ;i++) {
-                        try {
-                            System.out.print("Mashiur: ");
-                            oos.writeObject(scanner.next());
-                            System.out.println("Adnan: " + ois.readObject());
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
+
+                    System.out.println("You are connected to the server");
+                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                try {
+                    for (int i = 0; ; i++) {
+                        System.out.print("Client: ");
+                        oos.writeObject(scanner.nextLine());
+                        String kotha=(String)ois.readObject();
+                        if(kotha!=" ")
+                            System.out.println("Server: " + kotha);
                     }
-                case 0:
-                    System.out.println("Thank you for dining with us!");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please select a valid option.");
-                    break;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else if (choice == 0) {
+                System.out.println("Thank you for dining with us!");
+            } else {
+                System.out.println("Invalid choice. Please select a valid option.");
             }
         } while (choice != 0);
 
