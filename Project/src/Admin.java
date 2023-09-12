@@ -4,7 +4,7 @@ import java.net.*;
 
 public class Admin {
     public static void main(String[] args) throws IOException {
-        Scanner in = new Scanner(System.in);
+        Scanner in= new Scanner (System.in);
         File folder = new File("E:/Java/Restaurant Management System/ad");
         folder.mkdir();
 
@@ -60,92 +60,99 @@ public class Admin {
             e.printStackTrace();
         }
 
-            String correctUsername = "admin";
-            String correctPassword = "password";
+        String correctUsername = "admin";
+        String correctPassword = "password";
 
-            System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tWelcome to the Restaurant Admin Panel\t\t\t\t\t\t\t\t\t\t\t\t\t");
+        System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tWelcome to the Restaurant Admin Panel\t\t\t\t\t\t\t\t\t\t\t\t\t");
 
-            // User authentication
-            System.out.print("Enter username: ");
-            String enteredUsername = in.nextLine();
+        // User authentication
+        System.out.print("Enter username: ");
+        String enteredUsername = in.nextLine();
 
-            System.out.print("Enter password: ");
-            String enteredPassword = in.nextLine();
+        System.out.print("Enter password: ");
+        String enteredPassword = in.nextLine();
 
-            if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
-                System.out.println("Authentication successful. You have access to admin fields.");
-                boolean continueProgram = true;
-                while (continueProgram) {
-                    System.out.println("Options: ");
-                    System.out.println("1. Access employee details \n" +
-                            "2. Client details\n" +
-                            "3. Maintenance details \n" +
-                            "4. Stock Details \n" +
-                            "5. Chat \n" +
-                            "6. Exit \n");
-                    System.out.print("Enter your choice: ");
-                    int n = in.nextInt();
+        if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
+            System.out.println("Authentication successful. You have access to admin fields.");
+            boolean continueProgram = true;
+            while (continueProgram) {
+                System.out.println("Options: ");
+                System.out.println("1. Access employee details \n" +
+                        "2. Client details\n" +
+                        "3. Maintenance details \n" +
+                        "4. Stock Details \n" +
+                        "5. Chat \n" +
+                        "6. Exit \n");
+                System.out.print("Enter your choice: ");
+                int n = in.nextInt();
 
-                    if (n == 1) {
-                        Scanner e = new Scanner(employee);
+                if (n == 1) {
+                    Scanner e = new Scanner(employee);
 
-                        while (e.hasNextLine()) {
-                            String line = e.nextLine();
-                            System.out.println(line);
-                        }
-                        e.close();
-                    } else if (n == 2) {
-                        Scanner c = new Scanner(client);
-
-                        while (c.hasNextLine()) {
-                            String na = c.nextLine();// Added tab separation
-                            System.out.println(na);
-                        }
-                        c.close();
-                    } else if (n == 3) {
-                        Scanner m = new Scanner(maintenance);
-
-                        while (m.hasNextLine()) {
-                            String ma = m.nextLine();// Added tab separation
-                            System.out.println(ma);
-                        }
-                        m.close();
-                    } else if (n == 4) {
-                        Scanner s = new Scanner(stock);
-
-                        while (s.hasNextLine()) {
-                            String na = s.nextLine();// Added tab separation
-                            System.out.println(na);
-                        }
-                        s.close();
-                    } else if (n == 5) {
-                        ServerSocket server = new ServerSocket(65306);
-                        Socket socket = server.accept();
-                        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                        
-                        for (int i = 0; ; i++) {
-                            try {
-                                System.out.println("Mashiur: " + (String) ois.readObject());
-                                System.out.print("Adnan: ");
-                                oos.writeObject(in.nextLine());
-
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    while (e.hasNextLine()) {
+                        String line = e.nextLine();
+                        System.out.println(line);
                     }
+                    e.close();
+                }
+                else if (n == 2) {
+                    Scanner c = new Scanner(client);
 
-                    else if (n == 6) {
-                            System.out.println("Exiting the program.");
-                            continueProgram = false;
-                            break;
+                    while (c.hasNextLine()) {
+                        String na = c.nextLine();// Added tab separation
+                        System.out.println(na);
+                    }
+                    c.close();
+                }
+                else if (n == 3) {
+                    Scanner m = new Scanner(maintenance);
+
+                    while (m.hasNextLine()) {
+                        String ma = m.nextLine();// Added tab separation
+                        System.out.println(ma);
+                    }
+                    m.close();
+                }
+                else if (n == 4) {
+                    Scanner s = new Scanner(stock);
+
+                    while (s.hasNextLine()) {
+                        String na = s.nextLine();// Added tab separation
+                        System.out.println(na);
+                    }
+                    s.close();
+                }
+                else if (n == 5) {
+                    ServerSocket server = new ServerSocket(65306);
+                    Socket socket = server.accept();
+                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                    try {
+                        for (int i = 0; ; i++) {
+                            String kotha = (String) ois.readObject();
+                            if(kotha!=" ") {
+                                System.out.println("Client: " + kotha);
+                            }
+                            System.out.print("Server: ");
+                            oos.writeObject(in.nextLine());
                         }
-                        System.out.println("\n");
+                    }catch(ClassNotFoundException e){
+                        e.printStackTrace();
                     }
                 }
-            else {
-                System.out.println("Access Denied");
+
+
+
+                else if (n == 6) {
+                    System.out.println("Exiting the program.");
+                    continueProgram = false;
+                    break;
+                }
+                System.out.println("\n");
             }
         }
+        else {
+            System.out.println("Access Denied");
+        }
+    }
 }
